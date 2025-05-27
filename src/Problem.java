@@ -1,3 +1,6 @@
+import java.util.HashSet;
+import java.util.Set;
+
 public class Problem {
     /**
      * Returns how many salamanders less than 3 years old will be at risk from a
@@ -14,7 +17,24 @@ public class Problem {
      * @param initialPatient the first salamander to be infected
      * @return the number of salamanders less than 3 years old that may be infected
      */
-    public static int countSeriousInfections(Salamander initialPatient) {
-        return -1;
+    public static int countSeriousInfections(Salamander initialPatient) 
+    {
+        Set<Salamander> infected = new HashSet<>();
+        Set<Salamander> youngInfected = new HashSet<>();
+        infected = listOfInfectedUnderAgeThree(initialPatient, infected);
+        for (Salamander salamander : infected)
+        {
+            if (salamander.getAge() < 3) youngInfected.add(salamander);
+        }
+        return youngInfected.size();
     }
+    public static Set<Salamander> listOfInfectedUnderAgeThree(Salamander initialPatient, Set<Salamander> infected)
+    {
+        if (initialPatient == null || infected.contains(initialPatient)) return infected;
+        infected.add(initialPatient);
+        for (Salamander potentialInfected : initialPatient.getContacts()) listOfInfectedUnderAgeThree(potentialInfected, infected);
+        return infected;
+    }
+
+
 }
